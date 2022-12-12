@@ -17,25 +17,13 @@ function preload(){
 }
 
 function create(){
-  //start of enemy spawning
-  var Enemy1 = new Phaser.Class({
-      Extends: Phaser.Physics.Arcade.Image,
-      initialize:
-      function Spawn (){
-        num = 4 + diff;
-        for(let i=0;i<num;i++){
-          
-        }
-      }
-  });
-  //end of enemy spawning
   //start of bullet stuff
   var Bullet = new Phaser.Class({
 
         Extends: Phaser.Physics.Arcade.Image,
 
         initialize:
-
+        //defines the bullet
         function Bullet (scene)
         {
             Phaser.Physics.Arcade.Image.call(this, scene, 0, 0, 'PBullet');
@@ -49,7 +37,7 @@ function create(){
 
             this._temp = new Phaser.Math.Vector2();
         },
-
+        //tells the bullet where to be fired from
         fire: function (ship)
         {
             this.lifespan = 1000;
@@ -60,25 +48,7 @@ function create(){
             this.setAngle(gameState.player.body.rotation);
             this.setPosition(gameState.player.x, gameState.player.y);
             this.body.reset(gameState.player.x, gameState.player.y);
-
-            // ship.body.advancePosition(10, this._temp);
-
-            // this.setPosition(this._temp.x, this._temp.y);
-            // this.body.reset(this._temp.x, this._temp.y);
-
-            //  if ship is rotating we need to add it here
-            // var a = ship.body.angularVelocity;
-
-            // if (ship.body.speed !== 0)
-            // {
-            //     var angle = Math.atan2(ship.body.velocity.y, ship.body.velocity.x);
-            // }
-            // else
-            // {
                 var angle = Phaser.Math.DegToRad(gameState.player.body.rotation);
-            // }
-
-            // this.body.world.velocityFromRotation(angle, this.speed + ship.body.speed, this.body.velocity);
             this.scene.physics.velocityFromRotation(angle, this.speed, this.body.velocity);
 
             this.body.velocity.x *= 2;
@@ -106,7 +76,7 @@ function create(){
     gameState.player.setMaxVelocity(200 * MSpeed);
   // player stuff
   //start of enemy stuff
-  gameState.enemy1 = this.physics.add.image(800,500, 'enemy');
+  Spawn(diff);
   gameState.enemy1.setDamping(false);
   gameState.enemy1.setDrag(0);
   gameState.enemy1.setMaxVelocity(400);
@@ -116,11 +86,11 @@ function create(){
     gameState.cursors = this.input.keyboard.createCursorKeys();
     fire = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     text = this.add.text(10, 10, '', { font: '16px Courier', fill: '#00ff00' });
-    text1 = this.add.text(10, 25, '', { font: '16px Courier', fill: '#00ff00' });
-    text2 = this.add.text(10, 40, '', { font: '16px Courier', fill: '#00ff00' });
-    text3 = this.add.text(10, 55, '', { font: '16px Courier', fill: '#00ff00' });
-    text4 = this.add.text(10, 70, '', { font: '16px Courier', fill: '#00ff00' });
-    text5 = this.add.text(10, 85, '', { font: '16px Courier', fill: '#00ff00' });
+    //text1 = this.add.text(10, 25, '', { font: '16px Courier', fill: '#00ff00' });
+    //text2 = this.add.text(10, 40, '', { font: '16px Courier', fill: '#00ff00' });
+    //text3 = this.add.text(10, 55, '', { font: '16px Courier', fill: '#00ff00' });
+    //text4 = this.add.text(10, 70, '', { font: '16px Courier', fill: '#00ff00' });
+    //text5 = this.add.text(10, 85, '', { font: '16px Courier', fill: '#00ff00' });
   gameState.bullets = this.physics.add.group({
         classType: Bullet,
         maxSize: 30,
@@ -152,10 +122,6 @@ function update(time){
   // fix with if else statment because code is dumb 
     
     //end of movement stuff
-  //start of enemy detection
-    // if player to left of enemy AND enemy moving to right (or not moving)
-    
-  //end of enemy detection
   //start of enemy rotation
 		//const rotation = Phaser.Math.Angle.Between(x, y, tx, ty)
   //gameState.vec = new Phaser.Math.Vector2(gameState.player.x - gameState.enemy1.x, gameState.player.y - gameState.enemy1.y)
@@ -219,3 +185,11 @@ function PBullet(time){
         }
     }
 }
+//start of enemy spawning
+      function Spawn (diff){
+        num = 4 + diff;
+        for(let i=0;i<num;i++){
+          gameState.enemy1 = this.physics.add.image(800,500, 'enemy');
+        }
+      }
+  //end of enemy spawning
