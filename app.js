@@ -17,6 +17,19 @@ function preload(){
 }
 
 function create(){
+  var Enemy = new Phaser.Class({
+    Extends: Phaser.Physics.Arcade.Image,
+    initialize:
+    function Enemy()
+    {
+      Phaser.Physics.Aracde.Image.call(this, 0, 0, 'enemy');
+      this.setDamping(false);
+      this.setDrag(0);
+      this.setMaxVelocity(400);
+      this.setScale(.15);
+      this.setAcceleration(50);
+    }
+  });
   //start of bullet stuff
   var Bullet = new Phaser.Class({
 
@@ -69,20 +82,13 @@ function create(){
         }
     });
   // end of bullet stuff
+  //start of player stuff
     gameState.player = this.physics.add.image(400, 300, 'spaceship');
 
     gameState.player.setDamping(true);
     gameState.player.setDrag(.97);
     gameState.player.setMaxVelocity(200 * MSpeed);
-  // player stuff
-  //start of enemy stuff
-  Spawn(diff);
-  gameState.enemy1.setDamping(false);
-  gameState.enemy1.setDrag(0);
-  gameState.enemy1.setMaxVelocity(400);
-  gameState.enemy1.setScale(.15);
-  gameState.enemy1.setAngle(0);
-
+  // end of player stuff
     gameState.cursors = this.input.keyboard.createCursorKeys();
     fire = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     text = this.add.text(10, 10, '', { font: '16px Courier', fill: '#00ff00' });
@@ -96,6 +102,11 @@ function create(){
         maxSize: 30,
         runChildUpdate: true
     });
+  gameState.enemies = this.physics.add.group({
+    classType: Enemy,
+    maxSize: 4 + diff,
+    runChildUpdate: true
+  });
 }
 
 function update(time){
@@ -141,11 +152,11 @@ function update(time){
   //FINISH THIS (GAME WILL NOT WORK OTHERWISE, FINISH XP TOO)
 
     text.setText('Speed: ' + gameState.player.body.speed);
-    text1.setText('Rotation: ' + gameState.rotation);
-  text2.setText('Player X:' + gameState.player.x);
-  text3.setText('Player Y:' + gameState.player.y);
-  text4.setText('Enemy X:' + gameState.enemy1.x);
-  text5.setText('Enemy Y:' + gameState.enemy1.y);
+    //text1.setText('Rotation: ' + gameState.rotation);
+    //text2.setText('Player X:' + gameState.player.x);
+    //text3.setText('Player Y:' + gameState.player.y);
+    //text4.setText('Enemy X:' + gameState.enemy1.x);
+    //text5.setText('Enemy Y:' + gameState.enemy1.y);
   
   this.physics.world.wrap(gameState.player, 5);
 
@@ -190,6 +201,12 @@ function PBullet(time){
         num = 4 + diff;
         for(let i=0;i<num;i++){
           gameState.enemy1 = this.physics.add.image(800,500, 'enemy');
+          this.setDamping(false);
+          this.setDrag(0);
+          this.setMaxVelocity(400);
+          this.setScale(.15);
+          this.setAngle(0);
+          this.setAcceleration(100);
         }
       }
   //end of enemy spawning
